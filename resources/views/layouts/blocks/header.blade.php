@@ -1,8 +1,8 @@
 <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
-    <div class="container">
+    <div class="container-xl">
         <a class="navbar-brand" href="{{ route('index') }}">
 {{--            {{ config('app.name', 'Laravel') }}--}}
-            <img src="/img/logo.png" alt="logo" class="logo">
+            <img src="/img/logo.jpg" alt="logo" class="logo">
         </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
@@ -18,12 +18,13 @@
             <!-- Right Side Of Navbar -->
             <ul class="navbar-nav ml-auto">
                 <!-- Authentication Links -->
+                @if (Route::has('index'))
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('index') }}">{{ __('Главная') }}</a>
+                    </li>
+                @endif
+
                 @guest
-                    @if (Route::has('order.index'))
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('login') }}">{{ __('Заказать') }}</a>
-                        </li>
-                    @endif
 
                     @if (Route::has('login'))
                         <li class="nav-item">
@@ -39,14 +40,14 @@
                 @else
                     @if (Route::has('order.index'))
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('order.index') }}">{{ __('Заказать') }}</a>
+                            <a class="nav-link" href="{{ route('order.index') }}">{{ __('Заказы') }}</a>
                         </li>
                     @endif
 
                     <li class="nav-item dropdown">
                         <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                            {{ Auth::user()->name }}
+                            {{ Auth::user()->first_name }}
                         </a>
 
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">

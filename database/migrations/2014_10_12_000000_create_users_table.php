@@ -23,7 +23,7 @@ class CreateUsersTable extends Migration
                 ->nullable(false)
                 ->unique();
             $table->bigInteger('phone')
-                ->unique();
+                ->nullable(true);
             $table->string('src', 255)
                 ->nullable(false)
                 ->default('http://via.placeholder.com/300');

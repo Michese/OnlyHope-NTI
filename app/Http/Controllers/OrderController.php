@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Order;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller
 {
@@ -12,19 +14,52 @@ class OrderController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Order $order)
     {
-        return view('order');
+            $result = '';
+        if(!isset(\Auth::user()->user_id)) {
+            $result = redirect()->route('login');
+        } else {
+            $products=  $order->getOrderProductsByUserId(\Auth::user()->user_id);
+            $resultTotal = $order->resultTotal($products);
+
+            $resultQuantity = $order->resultQuantity($products);
+
+            $result = view('order', [
+                'products' => $products,
+                'resultTotal' => $resultTotal,
+                'resultQuantity' => $resultQuantity
+                ]);
+        }
+
+        return $result;
     }
 
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function create()
+    public function create(Request $request, Order $order)
     {
-        //
+        $post = $request->post();
+
+        $post['user_id'] = \Auth::user()->user_id;
+        $order->create($post);
+        return redirect()->route('order.index');
+    }
+
+    public function delete(Request $request, Order $order) {
+
+        $responseJson = $request->post();
+        $result = "";
+        foreach ($responseJson as $key => $value)  {
+            $result = $key;
+        }
+        $json = json_decode($result, true);
+        $order->deleteByOrderIdAndProductId($json['order_id'], $json['product_id']);
+        $products =  $order->getOrderProductsByUserId(\Auth::user()->user_id);
+        return $products;
     }
 
     /**

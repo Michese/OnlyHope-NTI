@@ -10,13 +10,14 @@
     <title>@yield('title')</title>
 
     <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}" defer></script>
+
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
 
     <!-- Styles -->
+    <link rel="stylesheet" href="{{  asset('/css/fontawesome-free-5.15.1-web/css/all.css') }}">
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
 
@@ -37,4 +38,11 @@
 
 </div>
 </body>
+<script src="
+@if(View::hasSection('script'))
+    @yield('script')
+@else
+    {{ asset('/js/app.js') }}
+@endif
+    " defer></script>
 </html>
